@@ -1,0 +1,33 @@
+name: Update EPG
+
+on:
+  schedule:
+    - cron: '0 3,9,15,21 * * *'  # Horários UTC: 00:00, 06:00, 12:00, 18:00 no Brasil
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Run Scraper
+      run: node index.js
+
+    - name: Commit Changes
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add epg.xml
+        git commit -m "EPG updated automatically"
+        git push
