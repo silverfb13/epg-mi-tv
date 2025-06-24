@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer')
+const { chromium } = require('@playwright/test')
 const fs = require('fs')
 const dayjs = require('dayjs')
 const { parseStringPromise } = require('xml2js')
@@ -7,7 +7,7 @@ async function scrapeEPG() {
   const canaisXML = fs.readFileSync('canais.xml', 'utf-8')
   const canais = await parseStringPromise(canaisXML)
 
-  const browser = await puppeteer.launch({ headless: true })
+  const browser = await chromium.launch({ headless: true })
   const page = await browser.newPage()
 
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<tv generator-info-name="MeuEPG">\n`
@@ -20,8 +20,8 @@ async function scrapeEPG() {
     console.log(`Capturando: ${nomeCanal}`)
 
     try {
-      await page.goto(url, { waitUntil: 'networkidle2' })
-      await page.waitForSelector('#listings > ul > li', { timeout: 10000 })
+      await page.goto(url, { waitUntil: 'networkidle' })
+      await page.waitForSelector('#listings > ul > li', { timeout: 15000 })
 
       const programs = await page.$$eval('#listings > ul > li', items => {
         return items.map(item => {
