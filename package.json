@@ -1,0 +1,11 @@
+{
+  "name": "epg-mi-tv",
+  "version": "1.0.0",
+  "description": "EPG automático multi-canal do mi.tv",
+  "main": "index.js",
+  "dependencies": {
+    "puppeteer": "^21.3.8",
+    "dayjs": "^1.11.10",
+    "xml2js": "^0.4.23"
+  }
+}
